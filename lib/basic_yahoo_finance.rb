@@ -27,8 +27,8 @@ module BasicYahooFinance
         uri = URI("#{API_URL}/#{API_VERSION}/finance/quoteSummary/#{sym}?modules=#{mod}")
         response = http.request(uri)
         hash_result.store(sym, process_output(JSON.parse(response.body), mod))
-      rescue Net::HTTPBadResponse, Net::HTTPNotFound, Net::HTTPError, Net::HTTPServerError, JSON::ParserError
-        hash_result.store(sym, "HTTP Error")
+      rescue Net::HTTPBadResponse, Net::HTTPNotFound, Net::HTTPError, Net::HTTPServerError, JSON::ParserError => e
+        hash_result.store(sym, "HTTP Error: #{e.message}")
       end
 
       http.shutdown
