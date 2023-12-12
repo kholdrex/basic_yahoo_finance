@@ -12,6 +12,7 @@ module BasicYahooFinance
   # Class to send queries to Yahoo Finance API
   class Query
     API_URL = "https://query2.finance.yahoo.com"
+    API_VERSION = "v7"
 
     def initialize(cache_url = nil)
       @cache_url = cache_url
@@ -23,7 +24,7 @@ module BasicYahooFinance
       http = Net::HTTP::Persistent.new
       http.override_headers["User-Agent"] = "BYF/#{BasicYahooFinance::VERSION}"
       symbols.each do |sym|
-        uri = URI("#{API_URL}/v6/finance/quoteSummary/#{sym}?modules=#{mod}")
+        uri = URI("#{API_URL}/#{API_VERSION}/finance/quoteSummary/#{sym}?modules=#{mod}")
         response = http.request(uri)
         hash_result.store(sym, process_output(JSON.parse(response.body), mod))
       rescue Net::HTTPBadResponse, Net::HTTPNotFound, Net::HTTPError, Net::HTTPServerError, JSON::ParserError
